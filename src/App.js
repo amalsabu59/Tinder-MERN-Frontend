@@ -1,14 +1,21 @@
 import './App.css';
-import Header from './Header';
-import SwipeButtons from './SwipeButtons';
-import TinderCards from './TinderCards';
+import Header from './pages/Header';
+import Dashbord from './pages/Dashbord';
+import Home from './pages/Home';
+import Onboarding from './pages/Onboarding';
+import SwipeButtons from './pages/SwipeButtons';
+import TinderCards from './pages/TinderCards';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <TinderCards/>
-      <SwipeButtons/>
-    </div>
+   <BrowserRouter>
+   <Routes>
+<Route path={"/"} element={<Home/>}/>
+<Route path={"/dashbord"} element={<Dashbord/>}/>
+<Route path={"/onboarding"} element={<Onboarding/>}/>
+   </Routes>
+   </BrowserRouter>
   );
 }
 
