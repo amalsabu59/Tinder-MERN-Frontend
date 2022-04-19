@@ -1,21 +1,24 @@
 import './App.css';
-import Header from './pages/Header';
 import Dashbord from './pages/Dashbord';
 import Home from './pages/Home';
 import Onboarding from './pages/Onboarding';
-import SwipeButtons from './pages/SwipeButtons';
-import TinderCards from './pages/TinderCards';
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+
 
 function App() {
+  const [cookies, setCookie, removeCookie] = useCookies(null)
+  const user = cookies.User
+  console.log(user)
   return (
-   <BrowserRouter>
-   <Routes>
-<Route path={"/"} element={<Home/>}/>
-<Route path={"/dashbord"} element={<Dashbord/>}/>
-<Route path={"/onboarding"} element={<Onboarding/>}/>
-   </Routes>
-   </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path={"/"}  element={user ? <Dashbord/>  : <Home />} />
+        <Route path={"/dashbord"} element={user ? <Dashbord /> : <Home/>} />
+        <Route path={"/onboarding"} element={<Onboarding />} />
+
+      </Routes>
+    </BrowserRouter>
   );
 }
 

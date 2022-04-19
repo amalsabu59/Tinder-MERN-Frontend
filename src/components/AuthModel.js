@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from 'axios'
+import axios from '../axios'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 
@@ -30,7 +30,13 @@ const AuthModel = ({ setShowModal,  isSignUp  }) => {
                 return
             }
 
+            const response = await axios.post(`auth/${isSignUp ? 'register' : 'login'}`, { email, password })
+            setCookie('User', response.data._id)
+           
 
+            const success = response.status === 201
+            if (success && isSignUp) navigate ('/onboarding')
+            if (success && !isSignUp) navigate ('/dashbord')
 
         } catch (error) {
             console.log(error)

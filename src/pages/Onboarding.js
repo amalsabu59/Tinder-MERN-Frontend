@@ -2,12 +2,19 @@ import Navbar from '../components/Navbar'
 import {useState} from 'react'
 import {useCookies} from 'react-cookie'
 import {useNavigate} from 'react-router-dom'
-import axios from 'axios'
+import axios from '../axios'
+import { Publish } from "@mui/icons-material";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from "../firebase"
 
 const OnBoarding = () => {
+ 
+
     const [cookies, setCookie, removeCookie] = useCookies(null)
+    const [file, setFile] = useState(null)
+    console.log(cookies.User,"userid")
     const [formData, setFormData] = useState({
-        user_id: cookies.UserId,
+        user_id: cookies.User,
         first_name: "",
         dob_day: "",
         dob_month: "",
@@ -20,11 +27,74 @@ const OnBoarding = () => {
         matches: []
 
     })
+    
 
     let navigate = useNavigate()
 
+    const userdetails = async (data) => {
+        try {
+          const response =  await axios.post("/cards/tinder", data)
+          console.log(response)
+          const success = response.status === 201
+          console.log(response)
+          if (success) navigate('/dashbord')
+      } catch (err) {
+          console.log(err)
+      }
+     
+  }
+
     const handleSubmit = async (e) => {
-        console.log('submitted')
+        e.preventDefault()
+        const fileName = new Date().getTime() + file.name;
+    const storage = getStorage(app)
+    const storageRef = ref(storage,fileName)
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+// Listen for state changes, errors, and completion of the upload.
+uploadTask.on('state_changed',
+  (snapshot) => {
+    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    console.log('Upload is ' + progress + '% done');
+    switch (snapshot.state) {
+      case 'paused':
+        console.log('Upload is paused');
+        break;
+      case 'running':
+        console.log('Upload is running');
+        break;
+    }
+  }, 
+  (error) => {
+    // A full list of error codes is available at
+    // https://firebase.google.com/docs/storage/web/handle-errors
+    switch (error.code) {
+      case 'storage/unauthorized':
+        // User doesn't have permission to access the object
+        break;
+      case 'storage/canceled':
+        // User canceled the upload
+        break;
+
+      // ...
+
+      case 'storage/unknown':
+        // Unknown error occurred, inspect error.serverResponse
+        break;
+    }
+  }, 
+  () => {
+    // Upload completed successfully, now we can get the download URL
+    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      const data = {...formData, url:downloadURL};
+      userdetails(data)
+      
+    });
+  }
+);
+      
        
 
     }
@@ -188,19 +258,13 @@ console.log(formData)
 
                     <section>
 
-                        <label htmlFor="url">Profile Photo</label>
-                        <input
-                            type="url"
-                            name="url"
-                            id="url"
-                            onChange={handleChange}
-                            required={true}
-                        />
-                        <div className="photo-container">
-                            {formData.url && <img src={formData.url} alt="profile pic preview"/>}
+                    <div className="productUpload">
+                      <img src="" className="productUploadImg"/>
+                      <label for="file">
+                         Profile Picture <Publish/>
+                      </label>
+                            <input type="file" id="file" style={{ display: "none" }} onChange={(e) => setFile(e.target.files[0])}/>
                         </div>
-
-
                     </section>
 
                 </form>
