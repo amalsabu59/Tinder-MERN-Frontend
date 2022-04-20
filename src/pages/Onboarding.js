@@ -264,8 +264,11 @@ console.log(formData)
                          Profile Picture <Publish/>
                       </label>
                             <input type="file" id="file" style={{ display: "none" }} onChange={(e) => setFile(e.target.files[0])}/>
+                           
                         </div>
+                        {file && <img className="shareImg" src={URL.createObjectURL(file)} alt="" />}
                     </section>
+               
 
                 </form>
             </div>

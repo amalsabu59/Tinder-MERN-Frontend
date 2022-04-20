@@ -204,4 +204,24 @@ nav .logo-container .logo {
 
 .onboarding form .photo-container img {
     width: 100%
+}.share {
+    width: 10px;
+    height: 10px;
+    
 }
+.shareImg{
+    width: 200px;
+    height: 100px;
+    margin-top: 20px;
+   
+  
+}
+@media screen and (max-width: 420px) {
+    .primary-title {
+      font-size: 40px;
+    }
+
+    .onboarding form .multiple-input-container {
+        width: 385px;
+    }
+  }
