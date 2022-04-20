@@ -224,4 +224,10 @@ nav .logo-container .logo {
     .onboarding form .multiple-input-container {
         width: 385px;
     }
+    .sec {
+        height: 30%;
+    }
+    .shareImg{
+        width: 180px;
+    }
   }

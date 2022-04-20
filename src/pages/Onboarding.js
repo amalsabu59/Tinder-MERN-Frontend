@@ -123,7 +123,7 @@ console.log(formData)
                 <h2>CREATE ACCOUNT</h2>
 
                 <form onSubmit={handleSubmit}>
-                    <section>
+                    <section className='sec1'>
                         <label htmlFor="first_name">First Name</label>
                         <input
                             id="first_name"
@@ -256,7 +256,7 @@ console.log(formData)
                         <input type="submit"/>
                     </section>
 
-                    <section>
+                    <section className='sec'>
 
                     <div className="productUpload">
                       <img src="" className="productUploadImg"/>
